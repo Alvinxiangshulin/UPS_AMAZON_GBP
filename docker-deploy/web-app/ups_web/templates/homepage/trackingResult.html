@@ -1,0 +1,50 @@
+{% extends "homepage/base.html" %}
+
+{% block content %}
+   <head>
+    <meta charset="UTF-8">
+    <title>queryResult</title>
+    <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 150%;
+    position: relative;
+    top: 100px;
+}
+
+td {
+    font-family: "Apple LiGothic";
+    font-size: 20px;
+  border: 1px solid #f0ebe5;
+    background: #f0ebe5;
+  text-align: center;
+  padding: 8px;
+}
+th{
+    font-family: "Apple LiGothic";
+    font-size: 20px;
+    text-align: center;
+    background: #dfd7d7;
+}
+
+
+</style>
+</head>
+<table>
+  <tr>
+      <th>tracking number</th>
+      <th>shipment status</th>
+  </tr>
+  {% for pkg in pkgs%}
+  <tr>
+      <td>{{ pkg.package_id }}</td>
+      {% for key, value in pkgS.items%}
+          {% if key == pkg.status%}
+              <td>{{ value }}</td>
+          {% endif %}
+  {% endfor %}
+  </tr>
+  {% endfor %}
+</table>
+{% endblock content %}

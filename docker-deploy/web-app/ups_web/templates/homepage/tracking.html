@@ -1,0 +1,20 @@
+{% extends "homepage/base.html" %}
+
+{% block content %}
+    <head>
+
+
+    </head>
+    <div class="fieldset">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset>
+                <legend class="border-bottom mb-4"><p style="font-size:30px;font-family: 'Apple LiGothic'">Track by tracking number</p></legend>
+                <legend class="border-bottom mb-4">{{form.as_p}}</legend>
+            </fieldset>
+            <div>
+                <button class="button" type="submit"><p style="font-size:20px;font-family: 'Apple LiGothic'">Track</p></button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

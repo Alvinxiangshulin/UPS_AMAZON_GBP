@@ -1,0 +1,87 @@
+{% extends "homepage/base.html" %}
+{% block content %}
+   <head>
+    <meta charset="UTF-8">
+    <title>queryResult</title>
+    <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td {
+    font-family: "Apple LiGothic";
+    font-size: 20px;
+  border: 1px solid #f0ebe5;;
+    background: #f0ebe5;
+  text-align: center;
+  padding: 8px;
+}
+th{
+    font-family: "Apple LiGothic";
+    text-align: center;
+    background: #dfd7d7;
+}
+
+</style>
+</head>
+{% if user.is_authenticated %}
+<div class="fieldset">
+<HR align=center width=100% color=#9ca8b8 SIZE=1>
+<p style="font-size:30px;font-family: 'Apple LiGothic'">Item Details</p>
+<table>
+  <tr>
+      <th><p style="font-size:20px;font-family: 'Apple LiGothic'">tracking number</p></th>
+      <th><p style="font-size:20px;font-family: 'Apple LiGothic'">item name</p></th>
+      <th><p style="font-size:20px;font-family: 'Apple LiGothic'">count</p></th>
+
+  </tr>
+  {% for item in items%}
+  <tr>
+      <td><p style="font-size:20px;font-family: 'Apple LiGothic'">{{ item.package_id }}</p></td>
+      <td><p style="font-size:20px;font-family: 'Apple LiGothic'">{{ item.product }}</p></td>
+      <td><p style="font-size:20px;font-family: 'Apple LiGothic'">{{ item.count }}</p></td>
+
+  </tr>
+  {% endfor %}
+</table>
+<HR align=center width=100% color=#9ca8b8 SIZE=1>
+<p style="font-size:30px;font-family: 'Apple LiGothic'">Real Time Tracking</p>
+    {% if pkg.status == 0 %}
+        <p style="font-size:20px;font-family: 'Apple LiGothic'">The truck is {{ dist }} away from you. It is at ({{ truck.dest_x }}, {{truck.dest_y}}) and heading to the warehouse.</p>
+    {% elif pkg.status == 1 %}
+        <p style="font-size:20px;font-family: 'Apple LiGothic'">The truck is {{ dist }} away from you. It is at ({{ truck.dest_x }}, {{truck.dest_y}}) and going to approach you.</p>
+    {% elif pkg.status == 2 %}
+        <p style="font-size:20px;font-family: 'Apple LiGothic'">The package is in front of your door. Enjoy!</p>
+    {% endif %}
+<HR align=center width=100% color=#9ca8b8 SIZE=1>
+<p style="font-size:30px;font-family: 'Apple LiGothic'">Package History Timeline</p>
+<table>
+  <tr>
+      <th>detailed status</th>
+      <th>time</th>
+  </tr>
+  <tr>
+      <td>going to pickup</td>
+      <td>{{ history.topickup }}</td>
+  </tr>
+<tr>
+      <td>loading</td>
+      <td>{{ history.toload }}</td>
+  </tr>
+<tr>
+      <td>delivering</td>
+      <td>{{ history.todeliver }}</td>
+  </tr>
+<tr>
+      <td>delivered</td>
+      <td>{{ history.delivered }}</td>
+  </tr>
+</table>
+<HR align=center width=150% color=#dddddd SIZE=1>
+    </div>
+{% else %}
+    <p style="font-family:Verdana,serif;color: #5f788a">Please login to see your items!</p>
+{% endif %}
+{% endblock content %}

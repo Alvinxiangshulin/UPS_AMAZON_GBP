@@ -1,0 +1,27 @@
+Possible dangers in backend:
+
+1. Multithreading with database. It seems if we construct new connections too many the database port will crash.
+Then we tried to use one connection in all threads. However, this still crashes the connection
+because two transaction will be too close and database cannot handle it.
+Finally we solve the problem by using one connection only in the main process or close one connection in a thread
+after using it.
+
+2. The world or amazon will not receive our messages. Upon confirming received, they will send back
+the message's sequence number. Then we will store the sequence number in our unique send set.
+Our sending thread will check the set every 0.5 seconds. If there is no message's sequence number,
+the thread will resend the message until there is. Even in a high flakiness, it still works well.
+
+3. The world or amazon will send their messages several times too. Upon receiving a message,
+we will check its sequence number with our unique receive set. If not in set, we will process the message
+and put its sequence number in our set. If in set, we will pass it and just send back acknowledge.
+This is a safe way not to repeatedly process a message.
+
+Possible dangers in frontend:
+
+1. Check user's authentication. The tracking function itself does need any authentication,
+and anyone can get shipment status by tracking number. However, other pages like item details
+and update destination will have user validation. Unknown users cannot achieve results in our webpage.
+
+2. Updating destination may not take effect. It is possible that the user stay too long on update destination page
+and the package is delivering when the user submits his update request. In this case,
+we will check the shipment status again and tell the user whether they change the the destination successfully.

@@ -1,0 +1,85 @@
+{% extends "homepage/base.html" %}
+{% block content %}
+   <head>
+    <meta charset="UTF-8">
+    <title>queryResult</title>
+    <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 150%;
+    position: relative;
+    top: 100px;
+}
+
+td {
+    font-family: "Apple LiGothic";
+    font-size: 20px;
+  border: 1px solid #f0ebe5;
+    background: #f0ebe5;
+  text-align: center;
+  padding: 8px;
+}
+th{
+    font-family: "Apple LiGothic";
+    font-size: 20px;
+    text-align: center;
+    background: #dfd7d7;
+    border: 1px solid #f0ebe5;
+}
+
+</style>
+
+</head>
+{% if user.is_authenticated %}
+<table>
+  <tr>
+      <th>tracking number</th>
+      <th>destination x</th>
+      <th>destination y</th>
+      <th>truck id</th>
+      <th>warehouse id</th>
+      <th>shipment status</th>
+      <th>see detail</th>
+      <th>update destination</th>
+
+  </tr>
+  {% for pkg in pkgs%}
+  <tr>
+      <td>{{ pkg.package_id }}</td>
+      <td>{{ pkg.dest_x }}</td>
+      <td>{{ pkg.dest_y }}</td>
+      <td>{{ pkg.truck_id }}</td>
+      <td>{{ pkg.whid }}</td>
+      {% for key, value in pkgS.items%}
+          {% if key == pkg.status%}
+              <td>{{ value }}</td>
+          {% endif %}
+      {% endfor %}
+      <td>
+          <form method="post" action="{% url 'itemDetail' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="pkgid" value="{{ pkg.package_id }}">
+                            <button type="submit" class="button">See Detail</button>
+                    </form>
+      </td>
+      {% if pkg.status == 0 %}
+        <td>
+            <form method="post" action="{% url 'updateDest' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="pkgid" value="{{ pkg.package_id }}">
+                            <button type="submit" class="button">Update Destination</button>
+            </form>
+        </td>
+      {% elif pkg.status == 1 %}
+          <td>Cannot update destination in transition.</td>
+      {% elif pkg.status == 2 %}
+          <td>The package is delivered. No more updating.</td>
+      {% endif %}
+  </tr>
+  {% endfor %}
+</table>
+{% else %}
+    <p style="font-family:Verdana,serif;color: #5f788a">Please login to see your packages!</p>
+{% endif %}
+{% endblock content %}

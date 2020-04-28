@@ -1,0 +1,102 @@
+syntax = "proto2";
+
+message UtoAConnect 
+{
+    required int64 seqNum = 1;
+    required int64 worldId = 2;
+}
+
+
+message UserValidationRequest
+{
+    required int64 seqNum = 1;
+    required string UPSaccount = 2; // keep consistent with UPSaccount in ShipInfo
+    required int64 shipId=3;
+}
+
+
+message UserValidationResponse
+{
+    required int64 seqNum = 1;
+    required bool result = 2;
+    required int64 shipId=3;
+}
+
+
+message AtoUPickupRequest 
+{
+    required int64 seqNum = 1;
+    required int64 warehouseId = 2;
+    repeated ShipInfo shipment = 3;                        
+}
+
+
+message UtoALoadRequest 
+{
+    required int64 seqNum = 1;
+    required int64 warehouseId = 2; 
+    required int64 truckId = 3;
+    repeated int64 shipId = 4;
+}
+
+
+message Product 
+{
+    required string description = 1;
+    required int32 count = 2;
+}
+
+
+message ShipInfo
+{ 
+    required int64 shipId = 1;
+    optional string UPSaccount = 2;
+    repeated Product products = 3;
+    required int64 destination_x = 4; 
+    required int64 destination_y = 5;
+} 
+
+
+message AtoULoadFinishRequest 
+{
+    required int64 seqNum = 1; 
+    repeated int64 shipId = 2;                                
+    required int64 truckId = 3;
+}
+
+
+message Delivery
+{
+    required int64 seqNum = 1;
+    required int64 shipId = 2;
+}
+
+message AtoUCommand 
+{
+    repeated UserValidationRequest usrVlid = 1;
+    repeated AtoUPickupRequest pikReq = 2;
+    repeated AtoULoadFinishRequest loadReq = 3;
+    repeated ErrorMessage errMsg = 4;
+    repeated int64 ack = 5;
+    optional bool disconnection = 6;
+}
+
+
+message UtoACommand 
+{
+    repeated UtoAConnect connection = 1;
+    repeated UserValidationResponse usrVlid = 2;
+    repeated UtoALoadRequest loadReq = 3;
+    repeated Delivery delivery = 4;
+    repeated ErrorMessage errMsg = 5;
+    repeated int64 ack = 6;
+    optional bool disconnection = 7;
+}
+
+
+message ErrorMessage 
+{
+    required string err = 1;
+    required int64 originseqnum = 2;
+    required int64 seqNum = 3;
+}

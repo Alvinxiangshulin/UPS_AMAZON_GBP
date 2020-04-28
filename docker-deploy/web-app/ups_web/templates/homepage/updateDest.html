@@ -1,0 +1,26 @@
+{% extends "homepage/base.html" %}
+{% block content %}
+   <head>
+    <meta charset="UTF-8">
+    <title>queryResult</title>
+
+
+</head>
+{% if user.is_authenticated %}
+    <div class="fieldset">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset>
+                <legend class="border-bottom mb-4">You are updating package {{ pkgid }}</legend>
+                <legend class="border-bottom mb-4">{{newDestForm.as_p}}</legend>
+            </fieldset>
+            <div>
+                <input type="hidden" name="pkgid" value="{{ pkgid }}">
+                <button class="button" type="submit">Submit your new destination</button>
+            </div>
+        </form>
+    </div>
+{% else %}
+    <p style="font-family:Verdana,serif;color: #5f788a">Please login to update your package!</p>
+{% endif %}
+{% endblock content %}
